@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie API Client</title>
+</head>
+<body>
+
+<h1>Movie API Client</h1>
+
+<div id="movies-list">
+    <h2>Movies List</h2>
+    <ul id="movies-list-ul"></ul>
+</div>
+
+<div id="movie-details">
+    <h2>Movie Details</h2>
+    <div id="movie-details-content"></div>
+</div>
+
+<script>
+    // Function to fetch and display the list of movies
+    function fetchMovies() {
+        fetch('http://127.0.0.1:8000/api/movies/')
+            .then(response => response.json())
+            .then(data => {
+                const moviesListUl = document.getElementById('movies-list-ul');
+                moviesListUl.innerHTML = ''; // Clear existing list
+
+                data.forEach(movie => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${movie.title} (Director: ${movie.director})`;
+                    listItem.addEventListener('click', () => fetchMovieDetails(movie.id));
+                    moviesListUl.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching movies:', error));
+    }
+
+    // Function to fetch and display details of a specific movie
+    function fetchMovieDetails(movieId) {
+        fetch(`http://127.0.0.1:8000/api/movies/${movieId}/`)
+            .then(response => response.json())
+            .then(movie => {
+                const movieDetailsContent = document.getElementById('movie-details-content');
+                movieDetailsContent.innerHTML = `
+                    <strong>Title:</strong> ${movie.title}<br>
+                    <strong>Director:</strong> ${movie.director}<br>
+                    <strong>Release Date:</strong> ${movie.release_date}<br>
+                    <strong>Description:</strong> ${movie.description}
+                `;
+            })
+            .catch(error => console.error('Error fetching movie details:', error));
+    }
+
+    // Fetch and display the list of movies when the page loads
+    document.addEventListener('DOMContentLoaded', fetchMovies);
+</script>
+
+</body>
+</html>
