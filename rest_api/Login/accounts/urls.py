@@ -7,5 +7,5 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('change-password',views.change_password,name='change-password'),
     path('dashboard',views.dashboard,name='dashboard'),
-    #path('api-token-auth/', views.CustomAuthToken.as_view(), name='api_token_auth'),
+    path('api-token-auth/', views.CustomAuthToken.as_view(), name='api_token_auth'),
 ]
